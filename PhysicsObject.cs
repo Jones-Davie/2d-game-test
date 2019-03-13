@@ -57,11 +57,11 @@ public class PhysicsObject : MonoBehaviour
     void Update()
     {
         targetVelocity = Vector2.zero;
-        computeVelocity();
+        playerInput();
         
     }
 
-    protected virtual void computeVelocity()
+    protected virtual void playerInput()
     {
 
     }

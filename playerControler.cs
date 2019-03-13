@@ -9,8 +9,14 @@ public class playerControler : PhysicsObject
     public float maxSpeed = 7;
     public float yMovement = 0;
     public float whenFalling = 10;
+
     public bool falling = false;
     public bool jumping = false;
+
+    public float attackTime = 1000;
+    public float attackTimer = 0;
+    public bool isAttacking = false;
+    public bool leftMouseButtonDown = false;
 
 
     private Animator animator;
@@ -29,10 +35,30 @@ public class playerControler : PhysicsObject
         animator = GetComponent<Animator>();
     }
 
+        //coroutine 
 
-    protected override void computeVelocity()
+    protected override void playerInput()
     {
+        // ****** aanvallen *****
 
+        //speler valt aan als linkermuisknop in is gedrukt en hij niet al bezig is met aanvallen
+        if (Input.GetMouseButtonDown(0) && isAttacking == false && leftMouseButtonDown == false)
+        {
+            attack(); //voer aanval functie uit
+            leftMouseButtonDown = true; //moet meerdere keren klikken om aan te vallen, kan niet in blijven houden
+            Debug.Log("ik val aan");
+        }
+
+        //als speler muis knop heeft los gelaten mag hij weer aanvallen
+        if (Input.GetMouseButtonUp(0))
+        {
+            leftMouseButtonDown = false;
+        }
+
+        attackCountDown();
+         
+
+        // ****** beweging *****
         Vector2 move = Vector2.zero;
 
         move.x = Input.GetAxis("Horizontal");
@@ -88,7 +114,7 @@ public class playerControler : PhysicsObject
         if (velocity.y > 0.01f || velocity.y < -0.01f) // als er beweging is op Y-as
         {
             grounded = false; //sta je niet op de grond
-            
+
             if (yMovement < whenFalling && falling == false) //als de Y positie van het vorige frame hoger is dan de vorige, val je
             {
                 Debug.Log("falling: ymovement =" + yMovement);
@@ -118,13 +144,11 @@ public class playerControler : PhysicsObject
             jumping = false;
             animator.SetBool("playerFalling", falling);
             animator.SetBool("playerJumping", jumping);
-            Debug.Log("grounded");
         }
 
         yMovement = velocity.y; //update de vorige y positie met de huidige y positie
 
     }
-
 
     //flip animatie als player andere kant op rent
     private void flipAnimation(Vector2 move)
@@ -140,4 +164,35 @@ public class playerControler : PhysicsObject
             spriteRenderer.flipX = false;
         }
     }
+
+    private void attack()
+    {
+        isAttacking = true;
+        animator.SetBool("playerAttack", isAttacking);
+        attackTimer = .25f;
+        Debug.Log("attackTimer = " + attackTimer);
+    }
+
+    private void attackCountDown()
+    {
+        if (attackTimer != 0f)
+        {
+            Debug.Log("attack Timer > 0 aangeroepen");
+
+            attackTimer -= Time.deltaTime;
+
+            if (attackTimer < 0f)
+            {
+                Debug.Log("attack Timer < 0 aangeroepen");
+                attackTimer = 0f;
+                isAttacking = false;
+                Debug.Log("is Attacking = " + isAttacking);
+                animator.SetBool("playerAttack", isAttacking);
+            }
+
+        }
+
+
+    }
+
 }
