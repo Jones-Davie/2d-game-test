@@ -2,31 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerControler : PhysicsObject
+public class PlayerControler : PhysicsObject
 {
-
-    public float jumpSpeed = 7;
+    public float jumpSpeed = 8;
     public float maxSpeed = 7;
     public float yMovement = 0;
-    public float whenFalling = 10;
+    private float whenFalling = 10;
 
     public bool falling = false;
     public bool jumping = false;
 
-    public float attackTime = 1000;
-    public float attackTimer = 0;
+    public double attackTime = 0.25d;
+    public double attackTimer = 0;
     public bool isAttacking = false;
     public bool leftMouseButtonDown = false;
-
-
+    
+    protected RaycastHit2D attackDetector;
+    
+    
     private Animator animator;
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
 
     // Start is called before the first frame update
     void Start()
     {
-
-
+        
     }
 
     void Awake()
@@ -35,18 +35,15 @@ public class playerControler : PhysicsObject
         animator = GetComponent<Animator>();
     }
 
-        //coroutine 
-
     protected override void playerInput()
     {
         // ****** aanvallen *****
 
-        //speler valt aan als linkermuisknop in is gedrukt en hij niet al bezig is met aanvallen
-        if (Input.GetMouseButtonDown(0) && isAttacking == false && leftMouseButtonDown == false)
+        //speler valt aan als linkermuisknop in is gedrukt en hij niet al bezig is met aanvallen en hij op de grond staat
+        if (Input.GetMouseButtonDown(0) && isAttacking == false && leftMouseButtonDown == false && grounded == true)
         {
             attack(); //voer aanval functie uit
             leftMouseButtonDown = true; //moet meerdere keren klikken om aan te vallen, kan niet in blijven houden
-            Debug.Log("ik val aan");
         }
 
         //als speler muis knop heeft los gelaten mag hij weer aanvallen
@@ -56,7 +53,7 @@ public class playerControler : PhysicsObject
         }
 
         attackCountDown();
-         
+
 
         // ****** beweging *****
         Vector2 move = Vector2.zero;
@@ -74,14 +71,15 @@ public class playerControler : PhysicsObject
         {
             velocity.y = jumpSpeed * 2f;
 
-            if (Input.GetButtonUp("Jump"))
-            {
-                if (velocity.y > 0)
-                {
-                    velocity.y = velocity.y * .6f;
-                    Debug.Log("cancel de sprong");
-                }
-            }
+            /*            if (Input.GetButtonUp("Jump"))
+                        {
+                            Debug.Log("ButtonUp");
+                            if (velocity.y > 0)
+                            {
+                                velocity.y = velocity.y * .6f;
+                                Debug.Log("cancel de sprong");
+                            } 
+                        }*/
 
         }
         targetVelocity = move * maxSpeed;
@@ -117,13 +115,10 @@ public class playerControler : PhysicsObject
 
             if (yMovement < whenFalling && falling == false) //als de Y positie van het vorige frame hoger is dan de vorige, val je
             {
-                Debug.Log("falling: ymovement =" + yMovement);
-                Debug.Log("falling: velocity.y =" + velocity.y);
                 falling = true;
                 jumping = false;
                 animator.SetBool("playerFalling", falling);
                 animator.SetBool("playerJumping", jumping);
-                Debug.Log("falling");
             }
 
             else if (yMovement > whenFalling && jumping == false)
@@ -132,8 +127,6 @@ public class playerControler : PhysicsObject
                 jumping = true;
                 animator.SetBool("playerFalling", falling);
                 animator.SetBool("playerJumping", jumping);
-                Debug.Log("jumping: ymovement = " + yMovement);
-                Debug.Log("jumping: velocity.y = " + velocity.y);
             }
         }
 
@@ -151,7 +144,7 @@ public class playerControler : PhysicsObject
     }
 
     //flip animatie als player andere kant op rent
-    private void flipAnimation(Vector2 move)
+    public void flipAnimation(Vector2 move)
     {
         if (move.x < -0.01f && spriteRenderer.flipX == false)
         {
@@ -165,28 +158,28 @@ public class playerControler : PhysicsObject
         }
     }
 
+    //functie om aan te vallen
     private void attack()
     {
         isAttacking = true;
         animator.SetBool("playerAttack", isAttacking);
-        attackTimer = .25f;
-        Debug.Log("attackTimer = " + attackTimer);
+        attackTimer = attackTime;
+
+
     }
 
+    //laat een timer lopen nadat player aan heeft gevallen zodat hij weer op non-attacking wordt gezet
     private void attackCountDown()
     {
         if (attackTimer != 0f)
         {
-            Debug.Log("attack Timer > 0 aangeroepen");
 
             attackTimer -= Time.deltaTime;
 
             if (attackTimer < 0f)
             {
-                Debug.Log("attack Timer < 0 aangeroepen");
                 attackTimer = 0f;
                 isAttacking = false;
-                Debug.Log("is Attacking = " + isAttacking);
                 animator.SetBool("playerAttack", isAttacking);
             }
 

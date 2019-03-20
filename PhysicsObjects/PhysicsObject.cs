@@ -28,10 +28,10 @@ public class PhysicsObject : MonoBehaviour
     protected ContactFilter2D contactFilter;
 
     //maak een array van dingen die mogelijk een collission kunnen hebben voor de contactfilter
-    protected RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
+    public RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
 
 
-    protected List<RaycastHit2D> hitBufferList = new List<RaycastHit2D>(16);
+    public List<RaycastHit2D> hitBufferList = new List<RaycastHit2D>(16);
 
     //maak een kleine forcefield om je karakter om te zorgen dat het nooit in een andere collissiondetector komt zodat het vast blijft zitten.
     protected const float shellRadius = 0.01f;
@@ -45,7 +45,7 @@ public class PhysicsObject : MonoBehaviour
     void Start()
     {
         //don't use the standard triggers
-        contactFilter.useTriggers = false;
+        //contactFilter.useTriggers = false;
 
         // gebruik de contactfilter om te checken of de LayerCollissionMask van het gameObject een collission ziet met een ander object
         contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
