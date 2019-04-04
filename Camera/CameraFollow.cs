@@ -7,8 +7,8 @@ public class CameraFollow : MonoBehaviour
 
     private Vector2 cameraspeed;
 
-    public float easeY;
-    public float easeX;
+    public float easeY = 50;
+    public float easeX = 50;
 
     private GameObject player;
 

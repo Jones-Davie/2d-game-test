@@ -16,10 +16,9 @@ public class PlayerControler : PhysicsObject
     public double attackTimer = 0;
     public bool isAttacking = false;
     public bool leftMouseButtonDown = false;
+    public bool enableInput = true;
     
-    protected RaycastHit2D attackDetector;
-    
-    
+   
     private Animator animator;
     public SpriteRenderer spriteRenderer;
 
@@ -37,52 +36,54 @@ public class PlayerControler : PhysicsObject
 
     protected override void playerInput()
     {
+        if (enableInput) {
         // ****** aanvallen *****
 
         //speler valt aan als linkermuisknop in is gedrukt en hij niet al bezig is met aanvallen en hij op de grond staat
-        if (Input.GetMouseButtonDown(0) && isAttacking == false && leftMouseButtonDown == false && grounded == true)
-        {
-            attack(); //voer aanval functie uit
-            leftMouseButtonDown = true; //moet meerdere keren klikken om aan te vallen, kan niet in blijven houden
-        }
+            if (Input.GetMouseButtonDown(0) && isAttacking == false && leftMouseButtonDown == false && grounded == true)
+            {
+                attack(); //voer aanval functie uit
+                leftMouseButtonDown = true; //moet meerdere keren klikken om aan te vallen, kan niet in blijven houden
+            }
 
-        //als speler muis knop heeft los gelaten mag hij weer aanvallen
-        if (Input.GetMouseButtonUp(0))
-        {
-            leftMouseButtonDown = false;
-        }
+            //als speler muis knop heeft los gelaten mag hij weer aanvallen
+            if (Input.GetMouseButtonUp(0))
+            {
+                leftMouseButtonDown = false;
+            }
 
-        attackCountDown();
-
-
-        // ****** beweging *****
-        Vector2 move = Vector2.zero;
-
-        move.x = Input.GetAxis("Horizontal");
+            attackCountDown();
 
 
-        //roep de functie aan om de snelheden in te stellen
-        moveX(move);
-        moveY();
-        flipAnimation(move);
+            // ****** beweging *****
+            Vector2 move = Vector2.zero;
 
-        //spring als iemand op spatie drukt
-        if (Input.GetButtonDown("Jump") && grounded)
-        {
-            velocity.y = jumpSpeed * 2f;
+            move.x = Input.GetAxis("Horizontal");
 
-            /*            if (Input.GetButtonUp("Jump"))
-                        {
-                            Debug.Log("ButtonUp");
-                            if (velocity.y > 0)
+
+            //roep de functie aan om de snelheden in te stellen
+            moveX(move);
+            moveY();
+            flipAnimation(move);
+
+            //spring als iemand op spatie drukt
+            if (Input.GetButtonDown("Jump") && grounded)
+            {
+                velocity.y = jumpSpeed * 2f;
+
+                /*            if (Input.GetButtonUp("Jump"))
                             {
-                                velocity.y = velocity.y * .6f;
-                                Debug.Log("cancel de sprong");
-                            } 
-                        }*/
+                                Debug.Log("ButtonUp");
+                                if (velocity.y > 0)
+                                {
+                                    velocity.y = velocity.y * .6f;
+                                    Debug.Log("cancel de sprong");
+                                } 
+                            }*/
 
+            }
+            targetVelocity = move * maxSpeed;
         }
-        targetVelocity = move * maxSpeed;
     }
 
 

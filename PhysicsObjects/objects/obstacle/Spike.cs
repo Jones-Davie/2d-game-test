@@ -2,37 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class attackHitBox : MonoBehaviour
+public class Spike : MonoBehaviour
 {
-
     public GameObject player;
-    public PlayerControler playerControlerScript;
+    public PlayerCombat playerCombatScript;
 
-    private SpriteRenderer spriteRenderer;
+    private float damageValue = 10;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerControlerScript = player.GetComponent<PlayerControler>();
-
-    }
-
-    private void Awake()
-    {
+        playerCombatScript = player.GetComponent<PlayerCombat>();
+        Debug.Log("started");
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        
     }
 
        private void OnTriggerEnter2D(Collider2D collision)
     {
-        collision.SendMessageUpwards("beenHit", true);
+        Debug.Log("triggered");
+        if (collision.gameObject == player) {
+
+        Debug.Log("collission player");      
+        playerCombatScript.playerHealth -= damageValue;
+
+        }
         
     }
-
 }
