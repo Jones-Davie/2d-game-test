@@ -9,17 +9,21 @@ public class EnemyController : MonoBehaviour
     public int maxHealth = 100;
     public float playerDistance;
     public float attackCooldown;
+    public float attackTimer;
     public float attackRange = 40;
-    public float projectileSpeed = 100;
+    public float projectileSpeed;
 
     public bool idle;
     public bool agro = false;
 
     public GameObject bile;
     public GameObject player;
+    public GameObject mouth;
     public Transform playerPosition;
     public Animator anim;
 
+    //private Sprite[] Sprites;
+   
 
     // Start; is called before the first frame update
     void Awake()
@@ -27,7 +31,16 @@ public class EnemyController : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerPosition = player.GetComponent<Transform>();
+        attackCooldown = 1f;
+        attackTimer = attackCooldown;
+        mouth = GameObject.FindGameObjectWithTag("spitterMouth");
+        projectileSpeed = 20f;
+        
+        //Sprites = Resources.LoadAll<Sprite>("spitter");
+        //bile = GetSpriteByName("bile");
+        
     }
+    
 
     void Start()
     {
@@ -38,8 +51,10 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         checkPlayerDistance();
+        if (agro) {
+            attack();
+        }
     }
 
     void checkPlayerDistance() {
@@ -60,4 +75,27 @@ public class EnemyController : MonoBehaviour
             anim.SetBool("spitterIdle", idle);
         }
     }
+
+    public void attack () {
+
+      attackTimer -= Time.deltaTime;
+      Debug.Log(attackTimer);
+
+      if (attackTimer < 0f ) {
+          
+          Vector2 attackDirection = playerPosition.transform.position - transform.position;
+            attackDirection.Normalize(); //geeft de vector een magnitude (lengte) van 1
+
+            GameObject bileShooter;
+            bileShooter = Instantiate(bile, mouth.transform.position, transform.rotation) as GameObject;
+            bileShooter.GetComponent<Rigidbody2D>().velocity = attackDirection * projectileSpeed;
+
+            
+            Debug.Log("enemy attacks");
+            attackTimer = attackCooldown; 
+            
+      }
+
+    }
+    
 }
