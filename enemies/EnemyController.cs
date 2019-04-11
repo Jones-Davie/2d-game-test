@@ -64,13 +64,11 @@ public class EnemyController : MonoBehaviour
             idle = false;
             anim.SetBool("spitterAttack", agro);
             anim.SetBool("spitterIdle", idle);
-            Debug.Log("enemy: agro");
         }
 
         else if (playerDistance > attackRange && agro == true) {
             idle = true;
             agro = false;
-            Debug.Log("enemy: idle");
             anim.SetBool("spitterAttack", agro);
             anim.SetBool("spitterIdle", idle);
         }
@@ -79,7 +77,6 @@ public class EnemyController : MonoBehaviour
     public void attack () {
 
       attackTimer -= Time.deltaTime;
-      Debug.Log(attackTimer);
 
       if (attackTimer < 0f ) {
           
@@ -96,6 +93,14 @@ public class EnemyController : MonoBehaviour
             
       }
 
+    }
+
+    public void beenHit(bool hit)
+    {
+        if (hit)
+        {
+            Destroy(gameObject);
+        }
     }
     
 }

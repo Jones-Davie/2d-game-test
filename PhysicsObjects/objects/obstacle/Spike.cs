@@ -14,7 +14,6 @@ public class Spike : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerCombatScript = player.GetComponent<PlayerCombat>();
-        Debug.Log("started");
     }
 
     // Update is called once per frame
@@ -25,10 +24,8 @@ public class Spike : MonoBehaviour
 
        private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("triggered");
         if (collision.gameObject == player) {
-
-        Debug.Log("collission player");      
+    
         playerCombatScript.playerHealth -= damageValue;
 
         }
