@@ -88,7 +88,6 @@ public class PlayerCombat : MonoBehaviour
     private void playerHealthUpdate () {
 
         if ( playerHealth != playerOldHealth ) {
-            Debug.Log("health Changed from " + playerOldHealth + " to " + playerHealth);
             playerOldHealth = playerHealth;
             
             if (playerHealth > playerMaxHealth ) {

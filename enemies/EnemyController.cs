@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-
-    public int currentHealth;
-    public int maxHealth = 100;
     public float playerDistance;
     public float attackCooldown;
     public float attackTimer;
@@ -39,14 +36,6 @@ public class EnemyController : MonoBehaviour
         
         //Sprites = Resources.LoadAll<Sprite>("spitter");
         //bile = GetSpriteByName("bile");
-        
-    }
-    
-
-    void Start()
-    {
-        currentHealth = maxHealth;
-        Debug.Log("enemy active");
     }
 
     // Update is called once per frame
@@ -61,25 +50,29 @@ public class EnemyController : MonoBehaviour
     }
 
     void checkPlayerDistance() {
-        playerDistance = Vector2.Distance(transform.position, playerPosition.transform.position);
+        
+        if (!dead) {
+            
+            playerDistance = Vector2.Distance(transform.position, playerPosition.transform.position);
 
-        if (playerDistance < attackRange && agro == false) {
-            agro = true;
-            idle = false;
-            anim.SetBool("spitterAttack", agro);
-            anim.SetBool("spitterIdle", idle);
-        }
+            if (playerDistance < attackRange && agro == false) {
+                agro = true;
+                idle = false;
+                anim.SetBool("spitterAttack", agro);
+                anim.SetBool("spitterIdle", idle);
+            }
 
-        else if (playerDistance > attackRange && agro == true) {
-            idle = true;
-            agro = false;
-            anim.SetBool("spitterAttack", agro);
-            anim.SetBool("spitterIdle", idle);
+            else if (playerDistance > attackRange && agro == true) {
+                idle = true;
+                agro = false;
+                anim.SetBool("spitterAttack", agro);
+                anim.SetBool("spitterIdle", idle);
+            }
         }
     }
 
     public void attack () {
-
+    
       attackTimer -= Time.deltaTime;
 
       if (attackTimer < 0f ) {
@@ -88,11 +81,11 @@ public class EnemyController : MonoBehaviour
             attackDirection.Normalize(); //geeft de vector een magnitude (lengte) van 1
 
             GameObject bileShooter;
-            bileShooter = Instantiate(bile, mouth.transform.position, transform.rotation) as GameObject;
+            Transform aChild = transform.FindChild( "Mouth" );
+            bileShooter = Instantiate(bile, aChild.transform.position, transform.rotation) as GameObject;
             bileShooter.GetComponent<Rigidbody2D>().velocity = attackDirection * projectileSpeed;
 
             
-            Debug.Log("enemy attacks");
             attackTimer = attackCooldown; 
             
       }
@@ -101,11 +94,17 @@ public class EnemyController : MonoBehaviour
 
     public void beenHit(bool hit)
     {
-        if (hit)
+        if (hit && !dead)
         {
+            idle = false;
+            agro = false;
             dead = true;
-            anim.SetBool("Dead", dead);
-            Invoke ("Death", 2);
+            
+            anim.SetBool("spitterAttack", agro);
+            anim.SetBool("spitterIdle", idle);
+            anim.SetBool("spitterDeath", dead);
+            
+            Invoke ("Death", 1);
         }
     }
 

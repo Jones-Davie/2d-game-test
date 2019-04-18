@@ -7,6 +7,7 @@ public class bileScript : MonoBehaviour
     private float lifeTime;
      public GameObject player;
      public GameObject playerBody;
+     public GameObject[] spikes;
     public PlayerCombat playerCombatScript;
     private float damageValue = 10;
 
@@ -17,6 +18,7 @@ public class bileScript : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerCombatScript = player.GetComponent<PlayerCombat>();
         playerBody = GameObject.FindGameObjectWithTag("playerBody");
+        spikes = GameObject.FindGameObjectsWithTag("spike");
     }
 
     // Update is called once per frame
@@ -45,10 +47,17 @@ public class bileScript : MonoBehaviour
         Debug.Log("collission player");      
         playerCombatScript.playerHealth -= damageValue;
         Destroy(gameObject);
-
         }
-        
+
+        foreach (GameObject spike in spikes) {
+            if (collision.gameObject == spike) {
+                collision.SendMessageUpwards("hitByBile", true);
+            }
+        }
+   
     }
+
+
 }
 
 
