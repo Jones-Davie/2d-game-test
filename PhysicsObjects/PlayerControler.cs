@@ -110,7 +110,7 @@ public class PlayerControler : PhysicsObject
     private void moveY()
     {
 
-        if (velocity.y > 0.01f || velocity.y < -0.01f) // als er beweging is op Y-as
+        if (velocity.y > 0.05f || velocity.y < -0.05f) // als er beweging is op Y-as
         {
             grounded = false; //sta je niet op de grond
 
@@ -131,7 +131,7 @@ public class PlayerControler : PhysicsObject
             }
         }
 
-        else if (velocity.y == 0f) //als er geen Y beweging is dan sta je op de grond
+        else if (velocity.y < 0.05f) //als er geen Y beweging is dan sta je op de grond
         {
             grounded = true;
             falling = false;

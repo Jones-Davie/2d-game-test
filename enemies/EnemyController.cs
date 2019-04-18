@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
 
     public bool idle;
     public bool agro = false;
+    public bool dead = false;
 
     public GameObject bile;
     public GameObject player;
@@ -51,14 +52,17 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        checkPlayerDistance();
-        if (agro) {
-            attack();
+        if (!dead) {
+            checkPlayerDistance();
+            if (agro) {
+                attack();
+            }
         }
     }
 
     void checkPlayerDistance() {
         playerDistance = Vector2.Distance(transform.position, playerPosition.transform.position);
+
         if (playerDistance < attackRange && agro == false) {
             agro = true;
             idle = false;
@@ -99,8 +103,16 @@ public class EnemyController : MonoBehaviour
     {
         if (hit)
         {
-            Destroy(gameObject);
+            dead = true;
+            anim.SetBool("Dead", dead);
+            Invoke ("Death", 2);
         }
     }
+
+    private void Death () {
+
+        Destroy(gameObject);
+    }
+
     
 }
