@@ -16,6 +16,7 @@ public class PlayerCombat : MonoBehaviour
     public Collider2D attackHitBoxBack;
     public GameObject attackHitBoxFrontObject;
     public GameObject attackHitBoxBackObject;
+    public GameObject gameOver;
 
     //script en object van destructibles
     public Destructibles destructiblesScript;
@@ -50,6 +51,8 @@ public class PlayerCombat : MonoBehaviour
 
         attackHitBoxBack.enabled = false;
         attackHitBoxFront.enabled = false;
+
+        gameOver.SetActive(false);
     }
 
     private void Awake()
@@ -110,13 +113,20 @@ public class PlayerCombat : MonoBehaviour
         }
 
         if (playerDead == true && delayDestruct < 0f) {
-            Destroy(gameObject);
+            gameOver.SetActive(true);
+            Invoke("Death", 3);
+            
         }
     }
 
     public void playerHit ( float damage) {
         
         playerHealth -=damage;
+    }
+
+    private void Death () {
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex); 
     }
 
     

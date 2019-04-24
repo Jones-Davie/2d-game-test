@@ -20,7 +20,7 @@ public class DemonHitBox : MonoBehaviour
         damageTimer -= Time.deltaTime;
     }
 
-       private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         
         if (damageTimer < 0f ) {

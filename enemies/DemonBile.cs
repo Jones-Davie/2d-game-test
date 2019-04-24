@@ -9,18 +9,17 @@ public class DemonBile : MonoBehaviour
      public GameObject playerBody;
      public GameObject[] spikes;
     public PlayerCombat playerCombatScript;
-    private float damageValue = 10;
+    private float damageValue = 15;
     private Vector3 position;
 
     // Start is called before the first frame update
     void Start()
     {
-        lifeTime = 2f;    
+        lifeTime = 2.5f;    
         player = GameObject.FindGameObjectWithTag("Player");
         playerCombatScript = player.GetComponent<PlayerCombat>();
         playerBody = GameObject.FindGameObjectWithTag("playerBody");
         spikes = GameObject.FindGameObjectsWithTag("spike");
-
  
     }
 
@@ -30,7 +29,7 @@ public class DemonBile : MonoBehaviour
         lifeTime -= Time.deltaTime;
 
         position = transform.position;
-        position.y -= 0.15f;
+        position.y -= (Time.deltaTime * 3);
         transform.position = position;
 
         if (lifeTime < 0f){

@@ -16,11 +16,15 @@ public class bileScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        lifeTime = 1f;    
+
+        lifeTime = 1f;
+
         player = GameObject.FindGameObjectWithTag("Player");
-        playerCombatScript = player.GetComponent<PlayerCombat>();
         playerBody = GameObject.FindGameObjectWithTag("playerBody");
         spikes = GameObject.FindGameObjectsWithTag("spike");
+
+        playerCombatScript = player.GetComponent<PlayerCombat>();
+
     }
 
     // Update is called once per frame
@@ -29,6 +33,7 @@ public class bileScript : MonoBehaviour
         lifeTime -= Time.deltaTime;
 
         if (lifeTime < 0f){
+
             Destroy(gameObject);
         }
     }
@@ -53,11 +58,12 @@ public class bileScript : MonoBehaviour
 
         foreach (GameObject spike in spikes) {
             if (collision.gameObject == spike) {
+
                 collision.SendMessageUpwards("hitByBile", true);
                 Destroy(gameObject);
+                
             }
         }
-   
     }
 
 

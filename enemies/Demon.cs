@@ -33,6 +33,7 @@ public class Demon : MonoBehaviour
     // Start; is called before the first frame update
     void Awake()
     {
+
         anim = gameObject.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerPosition = player.GetComponent<Transform>();
@@ -43,15 +44,11 @@ public class Demon : MonoBehaviour
 
         attackCooldownFar = 5f;
         attackCooldownClose = 3f;
-        attackTimer = 1f;
+        attackTimer = 3f;
         
         projectileSpeed = 20f;
         demonHealth = 100f;
 
-        
-        
-        //Sprites = Resources.LoadAll<Sprite>("spitter");
-        //bile = GetSpriteByName("bile");
     }
 
     // Update is called once per frame
@@ -123,7 +120,7 @@ public class Demon : MonoBehaviour
     {
         if (hit && !dead)
         {
-            demonHealth -= 30f;
+            demonHealth -= 20f;
             Debug.Log("beenHit, demonHealth = " + demonHealth);
 
             if (demonHealth <= 0f ) {
