@@ -7,7 +7,7 @@ public class EnemyController : MonoBehaviour
     public float playerDistance;
     public float attackCooldown;
     public float attackTimer;
-    public float attackRange = 40;
+    public float attackRange = 50;
     public float projectileSpeed;
 
     public bool idle;
@@ -29,7 +29,7 @@ public class EnemyController : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerPosition = player.GetComponent<Transform>();
-        attackCooldown = 1f;
+        attackCooldown = 1.5f;
         attackTimer = attackCooldown;
         mouth = GameObject.FindGameObjectWithTag("spitterMouth");
         projectileSpeed = 20f;

@@ -2,31 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bileScript : MonoBehaviour
+public class DemonBile : MonoBehaviour
 {
-   
-    public GameObject player;
-    public GameObject playerBody;
-    public GameObject[] spikes;
-    public PlayerCombat playerCombatScript;
-
     private float lifeTime;
+     public GameObject player;
+     public GameObject playerBody;
+     public GameObject[] spikes;
+    public PlayerCombat playerCombatScript;
     private float damageValue = 10;
+    private Vector3 position;
 
     // Start is called before the first frame update
     void Start()
     {
-        lifeTime = 1f;    
+        lifeTime = 2f;    
         player = GameObject.FindGameObjectWithTag("Player");
         playerCombatScript = player.GetComponent<PlayerCombat>();
         playerBody = GameObject.FindGameObjectWithTag("playerBody");
         spikes = GameObject.FindGameObjectsWithTag("spike");
+
+ 
     }
 
     // Update is called once per frame
     void Update()
     {
         lifeTime -= Time.deltaTime;
+
+        position = transform.position;
+        position.y -= 0.15f;
+        transform.position = position;
 
         if (lifeTime < 0f){
             Destroy(gameObject);
@@ -37,31 +42,30 @@ public class bileScript : MonoBehaviour
     {
         if (hit)
         {
+
             Destroy(gameObject);
-            
+        
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject == playerBody) {
-   
-        playerCombatScript.playerHealth -= damageValue;
-        Destroy(gameObject);
 
+        Debug.Log("collission player");      
+        playerCombatScript.playerHealth -= damageValue;
+       
         }
 
         foreach (GameObject spike in spikes) {
             if (collision.gameObject == spike) {
                 collision.SendMessageUpwards("hitByBile", true);
-                Destroy(gameObject);
             }
         }
-   
+
+         Destroy(gameObject);
+
     }
 
 
 }
-
-
-

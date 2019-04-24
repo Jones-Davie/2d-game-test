@@ -7,6 +7,7 @@ public class Spike : MonoBehaviour
     public GameObject player;
     public GameObject playerBody;
     public PlayerCombat playerCombatScript;
+    public Animator anim;
 
     public Rigidbody2D rb;
 
@@ -23,13 +24,14 @@ public class Spike : MonoBehaviour
         playerBody = GameObject.FindGameObjectWithTag("playerBody");
         playerCombatScript = player.GetComponent<PlayerCombat>();
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
             damagePlayer();
-            if (rb.velocity.x < 0 && beenHitByBile ) {
+            if (rb.velocity.x < 1f && beenHitByBile ) {
                 damageValue = 30;
                 Invoke ("Death", 1);
             }
@@ -52,6 +54,7 @@ public class Spike : MonoBehaviour
             if (bile) {
                 damageValue = 15;
                 beenHitByBile = true;
+                anim.SetBool("beenHitByBile", beenHitByBile);
                 
             }
         }

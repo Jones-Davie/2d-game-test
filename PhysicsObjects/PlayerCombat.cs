@@ -114,9 +114,11 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    private void playerDeath() {
-
+    public void playerHit ( float damage) {
+        
+        playerHealth -=damage;
     }
+
     
 
 }
