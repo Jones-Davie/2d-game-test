@@ -29,7 +29,7 @@ public class DemonBile : MonoBehaviour
         lifeTime -= Time.deltaTime;
 
         position = transform.position;
-        position.y -= (Time.deltaTime * 3);
+        position.y -= (Time.deltaTime * 4);
         transform.position = position;
 
         if (lifeTime < 0f){

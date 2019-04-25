@@ -23,7 +23,7 @@ public class Spike : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerBody = GameObject.FindGameObjectWithTag("playerBody");
         playerCombatScript = player.GetComponent<PlayerCombat>();
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
 
@@ -31,10 +31,10 @@ public class Spike : MonoBehaviour
     void Update()
     {
             damagePlayer();
-            if (rb.velocity.x < 1f && beenHitByBile ) {
+            /*if (rb.velocity.x < 1f && beenHitByBile ) {
                 damageValue = 30;
                 Invoke ("Death", 1);
-            }
+            }*/
     }
 
        private void OnTriggerEnter2D(Collider2D collision)
@@ -55,7 +55,6 @@ public class Spike : MonoBehaviour
                 damageValue = 15;
                 beenHitByBile = true;
                 anim.SetBool("beenHitByBile", beenHitByBile);
-                
             }
         }
 
@@ -70,9 +69,9 @@ public class Spike : MonoBehaviour
             }
         }
 
-        private void Death () {
+        /*private void Death () {
             Destroy(gameObject);
-        }
+        }*/
           
 }
 

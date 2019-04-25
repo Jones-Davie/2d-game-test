@@ -16,11 +16,15 @@ public class Demon : MonoBehaviour
     public bool dead = false;
     public bool demonAttacking = false;
     public bool demonAttack = false;
+    public bool gameOver = false;
 
     public GameObject demonBile;
     public GameObject player;
     public GameObject bileDropper;
     public GameObject demonHitBox;
+    public PlayerControler playerControler;
+
+    public GameObject youWon;
 
     public BoxCollider2D demonHitBoxCollider;
 
@@ -37,17 +41,20 @@ public class Demon : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerPosition = player.GetComponent<Transform>();
+        playerControler = player.GetComponent<PlayerControler>();
 
         bileDropper = GameObject.FindGameObjectWithTag("bileDropper");
         demonHitBox = GameObject.FindGameObjectWithTag("demonHitBox");
         demonHitBoxCollider = demonHitBox.GetComponent<BoxCollider2D>();
 
-        attackCooldownFar = 5f;
-        attackCooldownClose = 3f;
+        attackCooldownFar = 4f;
+        attackCooldownClose = 2.5f;
         attackTimer = 3f;
         
         projectileSpeed = 20f;
         demonHealth = 100f;
+
+        youWon.SetActive(false);
 
     }
 
@@ -137,6 +144,9 @@ public class Demon : MonoBehaviour
 
     private void Death () {
 
+        youWon.SetActive(true);
+        gameOver = true;
+        playerControler.enableInput = false;
         Destroy(gameObject);
     
     }

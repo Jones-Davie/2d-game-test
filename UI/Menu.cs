@@ -5,13 +5,23 @@ using UnityEngine;
 public class Menu : MonoBehaviour
 {
     public GameObject menuUI;
+    public GameObject player;
+    public GameObject demon;
+
+    public Demon demonControler;
+    public PlayerCombat playerCombat;
+    public PlayerControler playerControler;
+    
 
     private bool paused = false;
 
     void Start() {
 
         menuUI.SetActive(false);
-    
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerControler = player.GetComponent<PlayerControler>();
+        playerCombat = player.GetComponent<PlayerCombat>();
+        demonControler = demon.GetComponent<Demon>();
     }
 
     void Update() {
@@ -22,11 +32,13 @@ public class Menu : MonoBehaviour
         if (paused) {
             menuUI.SetActive(true);
             Time.timeScale = 0;
+            playerControler.enableInput = false;
         }
 
-         if (!paused) {
+         if (!paused && !playerCombat.playerDead && !demonControler.gameOver ) {
             menuUI.SetActive(false);
             Time.timeScale = 1;
+            playerControler.enableInput = true;
         }
     }
 
